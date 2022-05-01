@@ -7,6 +7,7 @@ type ThingCommon = {
 type RgbLight = ThingCommon & {
   type: "rgbLight";
   color: string; // @TODO: add string shape
+  changeColor: (newColor: RgbLight["color"]) => void;
 };
 
 type VacuumLight = ThingCommon & {
@@ -27,11 +28,15 @@ export const initializeThings = () => {
 
   const addRgbLight = () => {
     const type = "rgbLight";
-    things.push({
+    const thing: RgbLight = {
       id: randomId(type),
       type,
-      color: "#FF0000",
-    });
+      color: "#ff0000",
+      changeColor: (newColor: RgbLight["color"]) => {
+        thing.color = newColor;
+      },
+    };
+    things.push(thing);
   };
 
   const addVacuum = () => {

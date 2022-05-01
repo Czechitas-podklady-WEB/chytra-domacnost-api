@@ -21,4 +21,19 @@ apiRouter
     if (thing) {
       context.response.body = thing;
     }
+  })
+  .post("/thing/:id", (context) => {
+    const thing = things.getThing(context.params.id);
+    if (thing?.type === "rgbLight") {
+      // Throws "BadResource: Bad resource ID" for some reason
+      // const result = context.request.body({
+      //   type: "json",
+      // });
+      // console.log(await result.value);
+
+      // @TODO: use color from body
+      thing.changeColor("#ff00ff");
+
+      context.response.body = thing;
+    }
   });
