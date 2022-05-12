@@ -31,7 +31,7 @@ export const initializeThings = () => {
     const thing: RgbLight = {
       id: randomId(type),
       type,
-      color: "#ff0000",
+      color: "#FF0000",
       changeColor: (newColor: RgbLight["color"]) => {
         thing.color = newColor;
       },

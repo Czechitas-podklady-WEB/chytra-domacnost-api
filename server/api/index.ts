@@ -7,7 +7,6 @@ export const apiRouter = new Router({ prefix: "/api" });
 const things = createDemoThings();
 
 apiRouter
-  .use(oakCors())
   .get("/things", (context) => {
     context.response.body = {
       things: things.listThings().map((thing) => ({
@@ -22,18 +21,25 @@ apiRouter
       context.response.body = thing;
     }
   })
-  .post("/thing/:id", (context) => {
+  .post("/thing/:id", async (context) => {
     const thing = things.getThing(context.params.id);
     if (thing?.type === "rgbLight") {
-      // Throws "BadResource: Bad resource ID" for some reason
-      // const result = context.request.body({
-      //   type: "json",
-      // });
-      // console.log(await result.value);
+      const data = await context.request.body({ type: "json" }).value;
+      const color: unknown = data.color;
 
-      // @TODO: use color from body
-      thing.changeColor("#ff00ff");
+      if (
+        typeof color === "string" &&
+        color.toUpperCase().match(/^#[0123456789ABCDEF]{6}$/) !== null
+      ) {
+        console.log(`Changing color to ${color}`);
+        thing.changeColor(color.toUpperCase());
 
-      context.response.body = thing;
+        context.response.body = thing;
+      } else {
+        context.response.body = {
+          error: "Bad data",
+        };
+      }
     }
-  });
+  })
+  .use(oakCors());
