@@ -3,7 +3,7 @@ import { parse } from "https://deno.land/std@0.137.0/flags/mod.ts";
 import { apiRouter } from "./api/index.ts";
 
 const { args } = Deno;
-const DEFAULT_PORT = 8080;
+const DEFAULT_PORT = 8000;
 const argPort = parse(args).port;
 const port = argPort ? Number(argPort) : DEFAULT_PORT;
 
