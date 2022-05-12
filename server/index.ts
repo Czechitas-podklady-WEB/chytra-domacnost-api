@@ -9,6 +9,8 @@ const port = argPort ? Number(argPort) : DEFAULT_PORT;
 
 const app = new Application();
 
+app.use(apiRouter.routes());
+
 // Serve public directory
 app.use(async (context, next) => {
   try {
@@ -20,8 +22,6 @@ app.use(async (context, next) => {
     next();
   }
 });
-
-app.use(apiRouter.routes());
 
 await app.listen({ port });
 console.log(`Server is running at http://localhost:${port}.`);
