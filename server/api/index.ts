@@ -9,7 +9,7 @@ const things = createDemoThings();
 apiRouter
   .get("/things", (context) => {
     let origin = context.request.url.origin;
-    if (!origin.includes("localhost")) {
+    if (!origin.includes("localhost") || Math.random() < 0) {
       origin = origin.replace("http:", "https:"); // Heroku workaround
     }
 
