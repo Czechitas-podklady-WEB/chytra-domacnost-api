@@ -8,6 +8,11 @@ const things = createDemoThings();
 
 apiRouter
   .get("/things", (context) => {
+    let origin = context.request.url.origin;
+    if (!origin.includes("localhost")) {
+      origin = origin.replace("http:", "https:"); // Heroku workaround
+    }
+
     context.response.body = {
       things: things.listThings().map((thing) => ({
         ...thing,
