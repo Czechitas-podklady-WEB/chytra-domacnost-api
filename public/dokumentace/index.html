@@ -9,9 +9,33 @@
 	</head>
 	<body>
 		<h1>Dokumentace</h1>
+
 		<h2>Výpis všech zařízení</h2>
-		<a href="/api/things"><code>/api/things</code></a>
+
+		<a href="/api/things"><code>{ORIGIN}/api/things</code></a>
+
 		<h2>Detail zařízení</h2>
-		<code>/api/thing/{ID_ZAŘÍZENÍ}</code>
+		<code>{ORIGIN}/api/thing/{ID_ZAŘÍZENÍ}</code>
+
+		<h2>Změna barevného světla</h2>
+
+		<code>
+			<pre>
+fetch('{ORIGIN}/api/thing/{ID_ZAŘÍZENÍ}', {
+	method: 'POST',
+	body: JSON.stringify({
+		color: '#FF00FF',
+	}),
+})
+</pre
+			>
+		</code>
+
+		<script>
+			document.body.innerHTML = document.body.innerHTML.replaceAll(
+				'{ORIGIN}',
+				window.location.origin,
+			)
+		</script>
 	</body>
 </html>
