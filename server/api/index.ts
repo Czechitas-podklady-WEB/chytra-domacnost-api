@@ -7,6 +7,7 @@ export const apiRouter = new Router({ prefix: "/api" });
 const things = createDemoThings();
 
 apiRouter
+  .use(oakCors())
   .get("/things", (context) => {
     let { origin } = context.request.url;
     if (!origin.includes("localhost")) {
@@ -46,5 +47,4 @@ apiRouter
         };
       }
     }
-  })
-  .use(oakCors());
+  });
