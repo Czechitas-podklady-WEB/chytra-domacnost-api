@@ -7,13 +7,13 @@ export const createDemoThings = () => {
 
   things.addWashingMachine();
 
-  for (let i = 0; i < 3; i++) {
-    things.addRgbLight();
-  }
+  things.addRgbLight("Obývák");
+  things.addRgbLight("Kuchyň");
+  things.addRgbLight("Dětský pokoj");
 
   things.addMotionSensor("Vstupní dveře");
 
-  things.addMotionSensor("Dětský pokoj");
+  things.addMotionSensor("Dětský pokoj", "motionDetected");
 
   things.addVacuum();
 

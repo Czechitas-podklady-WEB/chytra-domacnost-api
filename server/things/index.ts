@@ -43,7 +43,7 @@ export const initializeThings = () => {
       type: thing.type,
     }));
 
-  const addRgbLight = () => {
+  const addRgbLight = (note?: string) => {
     const type = "rgbLight";
     const thing: RgbLight = {
       id: randomId(type),
@@ -52,6 +52,7 @@ export const initializeThings = () => {
       changeColor: (newColor: RgbLight["color"]) => {
         thing.color = newColor;
       },
+      note,
     };
     things.push(thing);
   };
@@ -84,12 +85,15 @@ export const initializeThings = () => {
     });
   };
 
-  const addMotionSensor = (note?: string) => {
+  const addMotionSensor = (
+    note?: string,
+    initialState: MotionSensor["state"] = "noMotion",
+  ) => {
     const type = "motionSensor";
     things.push({
       id: randomId(type),
       type,
-      state: "noMotion",
+      state: initialState,
       note,
     });
   };
