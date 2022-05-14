@@ -11,9 +11,9 @@ export const createDemoThings = () => {
     things.addRgbLight();
   }
 
-  things.addMotionSensor("Front door");
+  things.addMotionSensor("Vstupní dveře");
 
-  things.addMotionSensor("Children's room");
+  things.addMotionSensor("Dětský pokoj");
 
   things.addVacuum();
 
