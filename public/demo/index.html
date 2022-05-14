@@ -6,26 +6,126 @@
 		<title>Demo | Chytrá domácnost</title>
 		<meta name="color-scheme" content="light dark" />
 		<link rel="stylesheet" href="../style.css" />
+		<style>
+			.canvas {
+				aspect-ratio: 1920 / 1280;
+				position: relative;
+				max-width: 1920px;
+				margin: 0 auto;
+			}
+			.background {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+			}
+			.window {
+				position: absolute;
+				top: 21.6%;
+				left: 29%;
+				width: 7.9%;
+				height: 15.8%;
+			}
+			.window + .window {
+				top: 21.6%;
+				left: 45.1%;
+				width: 7.7%;
+				height: 15.8%;
+			}
+			.window + .window + .window {
+				top: 21.7%;
+				left: 61.2%;
+				width: 7.7%;
+				height: 15.7%;
+			}
+			.window input {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				opacity: 0;
+				cursor: pointer;
+			}
+			.window::before,
+			.window::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+			}
+			.window::before {
+				background-color: var(--color, transparent);
+				opacity: 0.4;
+			}
+			.window::after {
+				box-shadow: 0 0 70px var(--color, transparent);
+				mix-blend-mode: screen;
+			}
+			.window:hover,
+			.window:focus-within {
+				box-shadow: 0 0 10px #000000;
+			}
+		</style>
 	</head>
 	<body>
-		<h1>Demo</h1>
-		<input type="color" />
+		<div class="canvas">
+			<img class="background" src="windows.jpg" alt="" />
+			<div class="window"><input type="color" /></div>
+			<div class="window"><input type="color" /></div>
+			<div class="window"><input type="color" /></div>
+		</div>
 		<script>
 			;(async () => {
+				const delay = (milliseconds) =>
+					new Promise((resolve) => {
+						setTimeout(() => {
+							resolve()
+						}, milliseconds)
+					})
+
 				const response = await fetch('/api/things')
 				const data = await response.json()
-				const rgbLight = data.things.find((thing) => thing.type === 'rgbLight')
-				const input = document.querySelector('input')
-				input.addEventListener('change', () => {
-					if (input.value.length === 7) {
-						fetch(rgbLight.url, {
+				const rgbLights = data.things.filter(
+					(thing) => thing.type === 'rgbLight',
+				)
+				const windows = document.querySelectorAll('.window')
+
+				let focusedInput = null
+
+				windows.forEach((windowElement, i) => {
+					const colorInput = windowElement.querySelector('input')
+					colorInput.addEventListener('focus', () => {
+						focusedInput = i
+					})
+					colorInput.addEventListener('blur', () => {
+						focusedInput = null
+					})
+					colorInput.addEventListener('change', () => {
+						fetch(rgbLights[i].url, {
 							method: 'POST',
 							body: JSON.stringify({
-								color: input.value,
+								color: colorInput.value,
 							}),
 						})
-					}
+					})
 				})
+
+				while (true) {
+					for (let i = 0; i < windows.length; i++) {
+						const windowElement = windows[i]
+						try {
+							const response = await fetch(rgbLights[i].url)
+							const data = await response.json()
+							windowElement.style.setProperty('--color', data.color)
+							if (focusedInput !== i) {
+								windowElement.querySelector('input').value = data.color
+							}
+						} catch (error) {
+							console.error(error)
+						}
+						await delay(300)
+					}
+				}
 			})()
 		</script>
 	</body>
