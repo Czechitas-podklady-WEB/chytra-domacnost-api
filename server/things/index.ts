@@ -2,6 +2,7 @@ import { randomId } from "./randomId.ts";
 
 type ThingCommon = {
   id: string;
+  note?: string;
 };
 
 type RgbLight = ThingCommon & {
@@ -10,12 +11,28 @@ type RgbLight = ThingCommon & {
   changeColor: (newColor: RgbLight["color"]) => void;
 };
 
-type VacuumLight = ThingCommon & {
+type Vacuum = ThingCommon & {
   type: "vacuum";
-  status: "home" | "returningHome" | "working" | "idle";
+  state: "home" | "returningHome" | "working" | "idle";
 };
 
-type Thing = RgbLight | VacuumLight;
+type Television = ThingCommon & {
+  type: "television";
+  nowPlaying: string;
+  availableChannels: string[];
+};
+
+type WashingMachine = ThingCommon & {
+  type: "washingMachine";
+  state: "on" | "off";
+};
+
+type MotionSensor = ThingCommon & {
+  type: "motionSensor";
+  state: "motionDetected" | "noMotion";
+};
+
+type Thing = RgbLight | Vacuum | Television | WashingMachine | MotionSensor;
 
 export const initializeThings = () => {
   const things: Thing[] = [];
@@ -44,7 +61,36 @@ export const initializeThings = () => {
     things.push({
       id: randomId(type),
       type,
-      status: "home",
+      state: "idle",
+    });
+  };
+
+  const addTelevision = () => {
+    const type = "television";
+    things.push({
+      id: randomId(type),
+      type,
+      nowPlaying: "Déčko",
+      availableChannels: ["ČT1", "ČT2", "Déčko", "Nova", "Prima"],
+    });
+  };
+
+  const addWashingMachine = () => {
+    const type = "washingMachine";
+    things.push({
+      id: randomId(type),
+      type,
+      state: "off",
+    });
+  };
+
+  const addMotionSensor = (note?: string) => {
+    const type = "motionSensor";
+    things.push({
+      id: randomId(type),
+      type,
+      state: "noMotion",
+      note,
     });
   };
 
@@ -55,6 +101,9 @@ export const initializeThings = () => {
     listThings,
     addRgbLight,
     addVacuum,
+    addTelevision,
+    addWashingMachine,
+    addMotionSensor,
     getThing,
   };
 };
