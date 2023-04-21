@@ -1,3 +1,4 @@
+import { isDefined } from '../utilities/isDefined'
 import { randomId } from './randomId'
 
 type ThingCommon = {
@@ -49,6 +50,12 @@ type Thing =
 
 export const initializeThings = () => {
 	const things: Thing[] = []
+
+	const listMatrix = () =>
+		things
+			.map((thing) => (thing.type === 'rgbLight' ? thing.color : undefined))
+			.filter(isDefined)
+			.slice(-100)
 
 	const listThings = (githubUser?: string) =>
 		things
@@ -137,6 +144,7 @@ export const initializeThings = () => {
 		things.find((thing) => thing.id === id) ?? null
 
 	return {
+		listMatrix,
 		listThings,
 		addLight,
 		addRgbLight,

@@ -38,5 +38,3 @@ export const githubUsers = [
 	'Ariel0000ff',
 	'Tetiana_M',
 ] as const
-
-export const fakeGodGithubUser = 'god' as const

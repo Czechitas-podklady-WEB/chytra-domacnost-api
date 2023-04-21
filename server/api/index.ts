@@ -3,7 +3,6 @@ import cors from 'cors'
 import express, { Request } from 'express'
 import fetch from 'node-fetch'
 import { createDemoThings } from '../things/createDemoThings'
-import { fakeGodGithubUser } from '../utilities/githubUsers'
 
 export const apiRouter = express.Router()
 
@@ -16,10 +15,6 @@ const getAllowedGithubUsers = async (
 	request: Request,
 ): Promise<undefined | string> => {
 	const bearerHeader = request.headers['authorization']
-
-	if (typeof request.query.god === 'string') {
-		return fakeGodGithubUser
-	}
 
 	const [type, value] = (bearerHeader ?? '').split(' ')
 	if (type !== 'Bearer') {
@@ -62,6 +57,9 @@ apiRouter
 	.get('/thing/:id', (request, response) => {
 		const thing = things.getThing(request.params.id)
 		response.json(thing)
+	})
+	.get('/matrix', (request, response) => {
+		response.json(things.listMatrix())
 	})
 	.post('/thing/:id', async (request, response) => {
 		const thing = things.getThing(request.params.id)
