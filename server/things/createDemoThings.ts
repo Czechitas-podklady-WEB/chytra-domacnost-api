@@ -1,3 +1,4 @@
+import { githubUsers } from '../utilities/githubUsers'
 import { initializeThings } from './index'
 
 export const createDemoThings = () => {
@@ -17,8 +18,16 @@ export const createDemoThings = () => {
 
 	things.addVacuum()
 
-	for (let i = 0; i < 102; i++) {
-		things.addRgbLight()
+	for (let i = 0; i < 100; i++) {
+		const userIndex = Math.floor((i - githubUsers.length / 2) / 2)
+		const allowedGithubUsers =
+			userIndex >= 0 && userIndex < githubUsers.length
+				? [githubUsers[userIndex]]
+				: []
+		things.addRgbLight(
+			`Světlo ${i % 10}:${Math.floor(i / 10)}`,
+			allowedGithubUsers,
+		)
 	}
 
 	return things

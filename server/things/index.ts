@@ -3,6 +3,7 @@ import { randomId } from './randomId'
 type ThingCommon = {
 	id: string
 	note?: string
+	allowedGithubUsers?: string[]
 }
 
 type Light = ThingCommon & {
@@ -69,7 +70,7 @@ export const initializeThings = () => {
 		things.push(thing)
 	}
 
-	const addRgbLight = (note?: string) => {
+	const addRgbLight = (note?: string, allowedGithubUsers?: string[]) => {
 		const type = 'rgbLight'
 		const thing: RgbLight = {
 			id: randomId(type),
@@ -79,6 +80,7 @@ export const initializeThings = () => {
 				thing.color = newColor
 			},
 			note,
+			allowedGithubUsers,
 		}
 		things.push(thing)
 	}
