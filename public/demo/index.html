@@ -85,9 +85,11 @@
 
 				const response = await fetch('/api/things')
 				const data = await response.json()
-				const lights = data.things.filter(
-					(thing) => thing.type === 'light' || thing.type === 'rgbLight',
-				)
+				const lights = data.things.filter((thing) => thing.type === 'rgbLight')
+				const basicLight = data.things.find((thing) => thing.type === 'light')
+				if (basicLight) {
+				}
+				lights.unshift(basicLight)
 				const windows = document.querySelectorAll('.window')
 
 				window.addEventListener('keydown', (event) => {
