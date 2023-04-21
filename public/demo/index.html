@@ -44,9 +44,7 @@
 				width: 100%;
 				height: 100%;
 				opacity: 0;
-			}
-			.window input:enabled {
-				cursor: pointer;
+				pointer-events: none;
 			}
 			.window::before,
 			.window::after {
@@ -64,6 +62,7 @@
 				mix-blend-mode: screen;
 			}
 			.window:hover:has(input:enabled) {
+				cursor: pointer;
 				box-shadow: 0 0 10px #000000;
 			}
 		</style>
@@ -71,9 +70,9 @@
 	<body>
 		<div class="canvas">
 			<img class="background" src="windows.jpg" alt="" />
-			<div class="window"><input type="color" disabled /></div>
-			<div class="window"><input type="color" disabled /></div>
-			<div class="window"><input type="color" disabled /></div>
+			<label class="window"><input type="checkbox" disabled /></label>
+			<label class="window"><input type="color" disabled /></label>
+			<label class="window"><input type="color" disabled /></label>
 		</div>
 		<script>
 			;(async () => {
@@ -86,8 +85,8 @@
 
 				const response = await fetch('/api/things')
 				const data = await response.json()
-				const rgbLights = data.things.filter(
-					(thing) => thing.type === 'rgbLight',
+				const lights = data.things.filter(
+					(thing) => thing.type === 'light' || thing.type === 'rgbLight',
 				)
 				const windows = document.querySelectorAll('.window')
 
@@ -102,22 +101,28 @@
 				let focusedInput = null
 
 				windows.forEach((windowElement, i) => {
-					const colorInput = windowElement.querySelector('input')
-					colorInput.addEventListener('focus', () => {
+					const input = windowElement.querySelector('input')
+					const thing = lights[i]
+					input.addEventListener('focus', () => {
 						focusedInput = i
 					})
-					colorInput.addEventListener('blur', () => {
+					input.addEventListener('blur', () => {
 						focusedInput = null
 					})
-					colorInput.addEventListener('change', () => {
-						fetch(rgbLights[i].url, {
+					input.addEventListener('change', () => {
+						console.log('change', input.checked)
+						fetch(thing.url, {
 							method: 'POST',
 							headers: {
 								'Content-Type': 'application/json',
 							},
-							body: JSON.stringify({
-								color: colorInput.value,
-							}),
+							body: JSON.stringify(
+								thing.type === 'light'
+									? { state: input.checked ? 'on' : 'off' }
+									: {
+											color: input.value,
+									  },
+							),
 						})
 					})
 				})
@@ -125,10 +130,18 @@
 				while (true) {
 					for (let i = 0; i < windows.length; i++) {
 						const windowElement = windows[i]
+						const thing = lights[i]
 						try {
-							const response = await fetch(rgbLights[i].url)
+							const response = await fetch(thing.url)
 							const data = await response.json()
-							windowElement.style.setProperty('--color', data.color)
+							windowElement.style.setProperty(
+								'--color',
+								thing.type === 'light'
+									? data.state === 'on'
+										? '#ffdd00'
+										: '#000000'
+									: data.color,
+							)
 							if (focusedInput !== i) {
 								windowElement.querySelector('input').value = data.color
 							}

@@ -7,10 +7,9 @@ export const createDemoThings = () => {
 
 	things.addWashingMachine()
 
-	things.addLight('Lampička')
+	things.addLight('Lampička v dětském pokoji')
 	things.addRgbLight('Obývák')
 	things.addRgbLight('Kuchyň')
-	things.addRgbLight('Dětský pokoj')
 
 	things.addMotionSensor('Vstupní dveře')
 

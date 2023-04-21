@@ -32,7 +32,21 @@ apiRouter
 	})
 	.post('/thing/:id', async (request, response) => {
 		const thing = things.getThing(request.params.id)
-		if (thing?.type === 'rgbLight') {
+		if (thing?.type === 'light') {
+			const data = request.body
+			const state: unknown = data.state
+
+			if (state === 'on' || state === 'off') {
+				console.log(`Changing state to ${state}`)
+				thing.changeState(state)
+
+				response.json(thing)
+			} else {
+				response.json({
+					error: 'Bad data',
+				})
+			}
+		} else if (thing?.type === 'rgbLight') {
 			const data = request.body
 			const color: unknown = data.color
 
