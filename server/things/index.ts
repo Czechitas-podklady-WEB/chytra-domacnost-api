@@ -57,6 +57,20 @@ export const initializeThings = () => {
 			.filter(isDefined)
 			.slice(-100)
 
+	const getFirstLightState = () => {
+		const state = things
+			.map((thing) => (thing.type === 'light' ? thing.state : undefined))
+			.filter(isDefined)[0]
+		return state
+	}
+	const getFirstRgbLightColors = () => {
+		const colors = things
+			.map((thing) => (thing.type === 'rgbLight' ? thing.color : undefined))
+			.filter(isDefined)
+			.slice(0, 2)
+		return colors
+	}
+
 	const listThings = (githubUser?: string) =>
 		things
 			.filter(
@@ -146,6 +160,8 @@ export const initializeThings = () => {
 	return {
 		listMatrix,
 		listThings,
+		getFirstLightState,
+		getFirstRgbLightColors,
 		addLight,
 		addRgbLight,
 		addVacuum,

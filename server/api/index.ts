@@ -61,6 +61,13 @@ apiRouter
 	.get('/matrix', (request, response) => {
 		response.json(things.listMatrix())
 	})
+	.get('/physical', (request, response) => {
+		response.json({
+			matrix: things.listMatrix(),
+			light: things.getFirstLightState(),
+			rgbLights: things.getFirstRgbLightColors(),
+		})
+	})
 	.post('/thing/:id', async (request, response) => {
 		const thing = things.getThing(request.params.id)
 		if (thing?.type === 'light') {
