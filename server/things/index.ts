@@ -50,11 +50,18 @@ type Thing =
 export const initializeThings = () => {
 	const things: Thing[] = []
 
-	const listThings = () =>
-		things.map((thing) => ({
-			id: thing.id,
-			type: thing.type,
-		}))
+	const listThings = (githubUser?: string) =>
+		things
+			.filter(
+				(thing) =>
+					thing.allowedGithubUsers === undefined ||
+					(typeof githubUser === 'string' &&
+						thing.allowedGithubUsers.includes(githubUser)),
+			)
+			.map((thing) => ({
+				id: thing.id,
+				type: thing.type,
+			}))
 
 	const addLight = (note?: string) => {
 		const type = 'light'
