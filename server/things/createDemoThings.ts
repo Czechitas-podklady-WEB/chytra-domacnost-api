@@ -5,8 +5,8 @@ export const createDemoThings = () => {
 	const things = initializeThings()
 
 	things.addLight('Lampička v dětském pokoji')
-	things.addRgbLight('Obývák')
-	things.addRgbLight('Kuchyň')
+	// things.addRgbLight('Obývák')
+	// things.addRgbLight('Kuchyň')
 
 	for (let i = 0; i < 100; i++) {
 		const userIndex = Math.floor((i - githubUsers.length / 2) / 2)
