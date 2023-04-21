@@ -103,6 +103,9 @@
 					colorInput.addEventListener('change', () => {
 						fetch(rgbLights[i].url, {
 							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
 							body: JSON.stringify({
 								color: colorInput.value,
 							}),
@@ -116,6 +119,7 @@
 						try {
 							const response = await fetch(rgbLights[i].url)
 							const data = await response.json()
+							console.log(data)
 							windowElement.style.setProperty('--color', data.color)
 							if (focusedInput !== i) {
 								windowElement.querySelector('input').value = data.color

@@ -1,21 +1,25 @@
-import { initializeThings } from "./index.ts";
+import { initializeThings } from './index'
 
 export const createDemoThings = () => {
-  const things = initializeThings();
+	const things = initializeThings()
 
-  things.addTelevision();
+	things.addTelevision()
 
-  things.addWashingMachine();
+	things.addWashingMachine()
 
-  things.addRgbLight("Obývák");
-  things.addRgbLight("Kuchyň");
-  things.addRgbLight("Dětský pokoj");
+	things.addRgbLight('Obývák')
+	things.addRgbLight('Kuchyň')
+	things.addRgbLight('Dětský pokoj')
 
-  things.addMotionSensor("Vstupní dveře");
+	things.addMotionSensor('Vstupní dveře')
 
-  things.addMotionSensor("Dětský pokoj", "motionDetected");
+	things.addMotionSensor('Dětský pokoj', 'motionDetected')
 
-  things.addVacuum();
+	things.addVacuum()
 
-  return things;
-};
+	for (let i = 0; i < 102; i++) {
+		things.addRgbLight()
+	}
+
+	return things
+}

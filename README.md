@@ -5,11 +5,11 @@ Projekt na trénování práce s api.
 ## Spuštění
 
 ```sh
-deno run --allow-net --allow-read server.ts
+npm start
 ```
 
 ## Vývoj
 
 ```sh
-denon run --allow-net --allow-read server.ts
+npm run dev
 ```

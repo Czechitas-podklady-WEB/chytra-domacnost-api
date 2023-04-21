@@ -1,27 +1,27 @@
-import { Application } from "https://deno.land/x/oak@v10.5.1/mod.ts";
-import { parse } from "https://deno.land/std@0.137.0/flags/mod.ts";
-import { apiRouter } from "./api/index.ts";
+import express from 'express'
+import { apiRouter } from './api/index'
 
-const { args } = Deno;
-const DEFAULT_PORT = 8000;
-const argPort = parse(args).port;
-const port = argPort ? Number(argPort) : DEFAULT_PORT;
+const port = false ? Number(0) : 8000
 
-const app = new Application();
+const app = express()
 
-app.use(apiRouter.routes());
+// app.use(apiRouter.routes())
 
-// Serve public directory
-app.use(async (context, next) => {
-  try {
-    await context.send({
-      root: `${Deno.cwd()}/public`,
-      index: "index.html",
-    });
-  } catch {
-    next();
-  }
-});
+app.use(express.static('public'))
+app.use('/api', apiRouter)
 
-await app.listen({ port });
-console.log(`Server is running at http://localhost:${port}.`);
+// // Serve public directory
+// app.use(async (context, next) => {
+// 	try {
+// 		await context.send({
+// 			root: `${Deno.cwd()}/public`,
+// 			index: 'index.html',
+// 		})
+// 	} catch {
+// 		next()
+// 	}
+// })
+
+app.listen(port, () => {
+	console.log(`Server is running at http://localhost:${port}.`)
+})

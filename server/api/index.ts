@@ -1,50 +1,53 @@
-import { Router } from "https://deno.land/x/oak@v10.5.1/mod.ts";
-import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import { createDemoThings } from "../things/createDemoThings.ts";
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import express from 'express'
+import { createDemoThings } from '../things/createDemoThings'
 
-export const apiRouter = new Router({ prefix: "/api" });
+export const apiRouter = express.Router()
 
-const things = createDemoThings();
+const things = createDemoThings()
+
+apiRouter.use(cors())
+apiRouter.use(bodyParser.json())
 
 apiRouter
-  .use(oakCors())
-  .get("/things", (context) => {
-    let { origin } = context.request.url;
-    if (!origin.includes("localhost")) {
-      origin = origin.replace("http:", "https:"); // Heroku workaround
-    }
+	.get('/things', (request, response) => {
+		const url =
+			request.protocol + '://' + request.get('host') + request.originalUrl
+		let { origin } = new URL(url)
+		if (!origin.includes('localhost')) {
+			origin = origin.replace('http:', 'https:')
+		}
 
-    context.response.body = {
-      things: things.listThings().map((thing) => ({
-        ...thing,
-        url: `${origin}/api/thing/${thing.id}`,
-      })),
-    };
-  })
-  .get("/thing/:id", (context) => {
-    const thing = things.getThing(context.params.id);
-    if (thing) {
-      context.response.body = thing;
-    }
-  })
-  .post("/thing/:id", async (context) => {
-    const thing = things.getThing(context.params.id);
-    if (thing?.type === "rgbLight") {
-      const data = await context.request.body({ type: "json" }).value;
-      const color: unknown = data.color;
+		response.json({
+			things: things.listThings().map((thing) => ({
+				...thing,
+				url: `${origin}/api/thing/${thing.id}`,
+			})),
+		})
+	})
+	.get('/thing/:id', (request, response) => {
+		const thing = things.getThing(request.params.id)
+		response.json(thing)
+	})
+	.post('/thing/:id', async (request, response) => {
+		const thing = things.getThing(request.params.id)
+		if (thing?.type === 'rgbLight') {
+			const data = request.body
+			const color: unknown = data.color
 
-      if (
-        typeof color === "string" &&
-        color.toUpperCase().match(/^#[0123456789ABCDEF]{6}$/) !== null
-      ) {
-        console.log(`Changing color to ${color}`);
-        thing.changeColor(color.toUpperCase());
+			if (
+				typeof color === 'string' &&
+				color.toUpperCase().match(/^#[0123456789ABCDEF]{6}$/) !== null
+			) {
+				console.log(`Changing color to ${color}`)
+				thing.changeColor(color.toUpperCase())
 
-        context.response.body = thing;
-      } else {
-        context.response.body = {
-          error: "Bad data",
-        };
-      }
-    }
-  });
+				response.json(thing)
+			} else {
+				response.json({
+					error: 'Bad data',
+				})
+			}
+		}
+	})

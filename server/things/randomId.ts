@@ -1,29 +1,15 @@
-import { makeSeededGenerators } from "https://deno.land/x/vegas@v1.3.0/mod.ts";
+import seedrandom from 'seedrandom'
 
-const seed = makeSeededGenerators("things");
+const seed = seedrandom('things')
+
+const characters = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f']
 
 export const randomId = (type: string) => {
-  const randomIdFragment = () =>
-    new Array(6).fill(null).map(() =>
-      seed.randomPick([
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-      ])
-    ).join("");
+	const randomIdFragment = () =>
+		new Array(6)
+			.fill(null)
+			.map(() => characters[Math.floor(seed() * characters.length)])
+			.join('')
 
-  return `${type.substring(0, 3)}-${randomIdFragment()}-${randomIdFragment()}`;
-};
+	return `${type.substring(0, 3)}-${randomIdFragment()}-${randomIdFragment()}`
+}
