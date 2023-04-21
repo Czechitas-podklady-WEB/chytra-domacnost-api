@@ -17,6 +17,19 @@
 		<h2>Detail zařízení</h2>
 		<code>{ORIGIN}/api/thing/{ID_ZAŘÍZENÍ}</code>
 
+		<h2>Zapnutí obyčejného světla</h2>
+
+		<code>
+			<pre>
+fetch('{ORIGIN}/api/thing/{ID_ZAŘÍZENÍ}', {
+	method: 'POST',
+	body: JSON.stringify({
+		state: 'on',
+	}),
+})
+</pre
+			>
+		</code>
 		<h2>Změna barevného světla</h2>
 
 		<code>
@@ -30,6 +43,11 @@ fetch('{ORIGIN}/api/thing/{ID_ZAŘÍZENÍ}', {
 </pre
 			>
 		</code>
+
+		<p>
+			Volitelně lze ke všem požadavkům přidat hlavičku Authorization pro
+			začlenení neveřejných zařízení.
+		</p>
 
 		<script>
 			document.body.innerHTML = document.body.innerHTML.replaceAll(
