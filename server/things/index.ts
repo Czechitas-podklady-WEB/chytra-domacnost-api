@@ -5,6 +5,12 @@ type ThingCommon = {
 	note?: string
 }
 
+type Light = ThingCommon & {
+	type: 'light'
+	state: 'on' | 'off'
+	changeState: (newState: Light['state']) => void
+}
+
 type RgbLight = ThingCommon & {
 	type: 'rgbLight'
 	color: string // @TODO: add string shape
@@ -32,7 +38,13 @@ type MotionSensor = ThingCommon & {
 	state: 'motionDetected' | 'noMotion'
 }
 
-type Thing = RgbLight | Vacuum | Television | WashingMachine | MotionSensor
+type Thing =
+	| Light
+	| RgbLight
+	| Vacuum
+	| Television
+	| WashingMachine
+	| MotionSensor
 
 export const initializeThings = () => {
 	const things: Thing[] = []
@@ -42,6 +54,20 @@ export const initializeThings = () => {
 			id: thing.id,
 			type: thing.type,
 		}))
+
+	const addLight = (note?: string) => {
+		const type = 'light'
+		const thing: Light = {
+			id: randomId(type),
+			type,
+			state: 'off',
+			changeState: (newState) => {
+				thing.state = newState
+			},
+			note,
+		}
+		things.push(thing)
+	}
 
 	const addRgbLight = (note?: string) => {
 		const type = 'rgbLight'
@@ -103,6 +129,7 @@ export const initializeThings = () => {
 
 	return {
 		listThings,
+		addLight,
 		addRgbLight,
 		addVacuum,
 		addTelevision,

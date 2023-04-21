@@ -7,6 +7,7 @@ export const createDemoThings = () => {
 
 	things.addWashingMachine()
 
+	things.addLight('Lampička')
 	things.addRgbLight('Obývák')
 	things.addRgbLight('Kuchyň')
 	things.addRgbLight('Dětský pokoj')
